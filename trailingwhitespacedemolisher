@@ -11,7 +11,9 @@ while [ ! -d .repo ] && cd ..; do noop=1; done; [ ! -d .repo ] && echo "Failed t
 
 #copy .pre-commit from where we were into every repository in our manifest's hooks directory
 for x in `repo list | sed 's/ :.*//g'`; do
-    cp $WHEREAMI/.pre-commit $x/.git/hooks/pre-commit
+    rm $x/.git/hooks/pre-commit
+    cp -f $WHEREAMI/.pre-commit $x/.git/hooks/pre-commit
+    chmod a+x $x/.git/hooks/pre-commit
     echo "$x = done"
 done
 
