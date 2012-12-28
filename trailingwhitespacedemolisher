@@ -1,0 +1,18 @@
+#!/bin/bash
+[ ! -e .pre-commit ] && echo "RUN THIS FROM INSIDE THE HELPERS FOLDER!" && exit 1
+
+echo "Installing pre-commit hook to clean all trailing whitespace from staged files before committing"
+
+#save this for later
+WHEREAMI=`pwd`
+
+#find root of repository
+while [ ! -d .repo ] && cd ..; do noop=1; done; [ ! -d .repo ] && echo "Failed to find repository root" && exit 1
+
+#copy .pre-commit from where we were into every repository in our manifest's hooks directory
+for x in `repo list | sed 's/ :.*//g'`; do
+    cp $WHEREAMI/.pre-commit $x/.git/hooks/pre-commit
+    echo "$x = done"
+done
+
+cd $WHERAMI
